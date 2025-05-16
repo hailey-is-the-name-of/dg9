@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>이제부터 진짜 대구!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+  <style>
+    :root {
+      --content-max-width: 1000px;
+      --content-width: 100%;
+      --progress-height: 16px;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 20px 14px; }
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: none;
+      color: #888;
+      font-size: 12px;
+      padding: 4px 6px;
+      text-decoration: none;
+    }
+
+    #content-container {
+      width: var(--content-width);
+      max-width: var(--content-max-width);
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 32px 0 20px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 18px; margin: 60px 0 12px; }
+    }
+
+    .region-tabs {
+      display: flex;
+      height:-10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 16px;
+      gap: 8px;
+    }
+
+    .region-tabs button {
+      background: #eee;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .region-tabs button:hover {
+      background: #008ccd;
+    }
+
+    #image-wrapper {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      #image-wrapper { height: 90vh; }
+    }
+
+    #main-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    .share-container {
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .share-btn {
+      background: #FEE500;
+      color: #000;
+      padding: 16px 26px;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .share-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-left: 40px solid transparent;
+      border-bottom: 40px solid #002BFF;
+      z-index: 1000;
+      transform: rotate(-90deg);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-right: 40px solid transparent;
+      border-top: 40px solid #FF3B3B;
+      z-index: 1000;
+      transform: rotate(-90deg);
+    }
+  </style>
+</head>
+<body>
+  <a href="http://bluenew.life" class="home-btn">메인페이지로 돌아가기</a>
+  <br><div id="content-container">
+    <div class="region-tabs">
+      <button onclick="selectRegion(1)">중구</button>
+      <button onclick="selectRegion(2)">동구</button>
+      <button onclick="selectRegion(3)">서구</button>
+      <button onclick="selectRegion(4)">남구</button>
+      <button onclick="selectRegion(5)">북구</button>
+      <button onclick="selectRegion(6)">수성구</button>
+      <button onclick="selectRegion(7)">달서구</button>
+      <button onclick="selectRegion(8)">달성군</button>
+      <button onclick="selectRegion(9)">군위군</button>
+    </div>
+    <div id="image-wrapper">
+      <img id="main-image" src="images/1.jpg" alt="구 이미지">
+    </div>
+    <div class="share-container">
+      <button class="share-btn" onclick="shareToKakao()">카카오톡으로 공유하기</button>
+    </div>
+  </div>
+  <footer>
+    <a href="https://theminjoodaegu.co.kr/">
+      <img src="150_png_dgsd_logo.png" width="150" alt="더불어민주당 대구광역시당 로고">
+    </a>
+  </footer>
+  <script>
+    Kakao.init('37ea916b7f1ab457b58119c60ec4052a');
+    const imgElement = document.getElementById('main-image');
+    let currentRegion = 1;
+
+    function selectRegion(regionNum) {
+      currentRegion = regionNum;
+      imgElement.src = `images/${regionNum}.jpg`;
+    }
+
+    function shareToKakao() {
+      const shareUrl = `https://bluenew.life/dg9/share/${currentRegion}.html`;
+      const imageUrl = `https://bluenew.life/dg9/images/${currentRegion}.jpg`;
+      Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '이제부터 진짜 대구!',
+          description: '대구 지역 정책 시리즈',
+          imageUrl,
+          link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
