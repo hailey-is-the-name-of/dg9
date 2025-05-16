@@ -207,6 +207,16 @@
         }
       });
     }
+
+      // 기존 Kakao 관련 코드 아래에 추가
+
+  // 페이지 로드시 URL 파라미터로 이미지 설정
+  const urlParams = new URLSearchParams(window.location.search);
+  const imgParam = urlParams.get('img');
+  if (imgParam && !isNaN(imgParam)) {
+    currentRegion = parseInt(imgParam);
+    selectRegion(currentRegion); // 이미지 바꾸기
+
   </script>
 </body>
 </html>
