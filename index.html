@@ -185,40 +185,37 @@
     </a>
   </footer>
   <script>
-    Kakao.init('37ea916b7f1ab457b58119c60ec4052a');
-    const imgElement = document.getElementById('main-image');
-    let currentRegion = 1;
+  Kakao.init('37ea916b7f1ab457b58119c60ec4052a');
+  const imgElement = document.getElementById('main-image');
 
-    function selectRegion(regionNum) {
-      currentRegion = regionNum;
-      imgElement.src = `images/${regionNum}.jpg`;
-    }
-
-    function shareToKakao() {
-      const shareUrl = `https://bluenew.life/dg9/share/${currentRegion}.html`;
-      const imageUrl = `https://bluenew.life/dg9/images/${currentRegion}.jpg`;
-      Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: '이제부터 진짜 대구!',
-          description: '대구 지역 정책 시리즈',
-          imageUrl,
-          link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
-        }
-      });
-    }
-  // ✅ 여기부터 추가
+  // ✅ 전역 currentRegion 설정
   const urlParams = new URLSearchParams(window.location.search);
   const imgParam = urlParams.get('img');
-  if (imgParam && !isNaN(imgParam)) {
-    currentRegion = parseInt(imgParam);
-    selectRegion(currentRegion);
+  let currentRegion = (imgParam && !isNaN(imgParam)) ? parseInt(imgParam) : 1;
+
+  function selectRegion(regionNum) {
+    currentRegion = regionNum; // 버튼 클릭 시 업데이트
+    imgElement.src = `images/${regionNum}.jpg`;
   }
-  // ✅ 여기까지
 
-      // 기존 Kakao 관련 코드 아래에 추가
+  function shareToKakao() {
+    const shareUrl = `https://bluenew.life/dg9/share/${currentRegion}.html`;
+    const imageUrl = `https://bluenew.life/dg9/images/${currentRegion}.jpg`;
+    Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '이제부터 진짜 대구!',
+        description: '대구 지역 정책 시리즈',
+        imageUrl,
+        link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+      }
+    });
+  }
 
-
-  </script>
+  // ✅ 페이지 로드시 초기 이미지 설정
+  window.addEventListener('DOMContentLoaded', () => {
+    selectRegion(currentRegion);
+  });
+</script>
 </body>
 </html>
